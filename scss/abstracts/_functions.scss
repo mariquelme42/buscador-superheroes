@@ -1,0 +1,11 @@
+@use 'sass:map';
+@use 'variables' as *;
+
+// Devuelve una referencia a la custom property del color del tema.
+// Uso: color: color('primary');  =>  color: var(--color-primary);
+@function color($name) {
+  @if not map.has-key(map.get($themes, 'light'), $name) {
+    @error 'El color "#{$name}" no existe en $themes.';
+  }
+  @return var(--color-#{$name});
+}

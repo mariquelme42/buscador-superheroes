@@ -1,0 +1,35 @@
+@use '../abstracts' as *;
+
+.header {
+  background-color: color('secondary');
+  color: #ffffff;
+  box-shadow: 0 2px 8px color('shadow');
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-sm;
+    padding-block: $space-sm;
+  }
+
+  &__title {
+    font-family: $font-title;
+    font-weight: 400;
+    font-size: $font-size-xl;
+    letter-spacing: 2px;
+    line-height: 1.1;
+
+    @include respond('md') {
+      font-size: $font-size-xxl;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+
+    &:hover {
+      color: color('primary');
+    }
+  }
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Buscador de superhéroes que consume la SuperHero API">
+  <title>Buscador de Superhéroes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <h1 class="header__title">
+        <a href="./" class="header__link">Buscador de Superhéroes</a>
+      </h1>
+    </div>
+  </header>
+
+  <main class="container main">
+    <!-- BÚSQUEDA -->
+    <section class="search" aria-labelledby="search-title">
+      <h2 class="section-title" id="search-title">Búsqueda</h2>
+      <form class="search__form" id="search-form" novalidate>
+        <div class="form-field form-field--grow">
+          <label class="form-field__label" for="search-input">Nombre del personaje</label>
+          <input class="form-field__control" type="search" id="search-input" name="search"
+                 placeholder="Ej: batman, spider, woman..." autocomplete="off" required>
+        </div>
+        <button class="button button--primary search__submit" type="submit">Buscar</button>
+      </form>
+      <p class="form-error" id="search-error" role="alert" hidden></p>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="results" id="results" aria-labelledby="results-title">
+      <h2 class="section-title results__title" id="results-title">
+        <span id="results-count">0</span> resultados
+      </h2>
+      <div class="status" id="status" aria-live="polite"></div>
+      <ul class="grid" id="results-grid"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="container footer__text">
+      Hecho con <span aria-label="amor">❤️</span> · Datos provistos por
+      <a class="footer__link" href="https://superheroapi.com" target="_blank" rel="noopener">SuperHero API</a>
+    </p>
+  </footer>
+</body>
+</html>

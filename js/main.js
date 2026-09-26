@@ -9,6 +9,7 @@ import { renderHeroCards } from './components/heroCards.js';
 import { renderPagination, getTargetPage } from './components/pagination.js';
 import { renderHeroDetail } from './components/heroDetail.js';
 import { showLoader, showMessage, clearStatus } from './components/status.js';
+import { initThemeToggle } from './components/themeToggle.js';
 
 // --------------------------------------------------------------------------
 // Elementos del DOM
@@ -28,6 +29,7 @@ const elements = {
     pageSelect: document.querySelector('#page-select'),
     totalPagesLabel: document.querySelector('#total-pages'),
   },
+  themeToggle: document.querySelector('#theme-toggle'),
 };
 
 // Guardamos la última búsqueda para no volver a pedirla a la API
@@ -215,6 +217,8 @@ const clearSearchError = () => {
 // Inicio
 // --------------------------------------------------------------------------
 const init = () => {
+  initThemeToggle(elements.themeToggle);
+
   elements.form.addEventListener('submit', handleSearchSubmit);
   elements.searchInput.addEventListener('input', clearSearchError);
   elements.orderSelect.addEventListener('change', handleOrderChange);

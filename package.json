@@ -1,0 +1,14 @@
+{
+  "name": "buscador-superheroes",
+  "version": "1.0.0",
+  "description": "Buscador de superhéroes que consume la SuperHero API - Trabajo Práctico Integrador Front End",
+  "main": "js/main.js",
+  "scripts": {
+    "sass": "sass scss/main.scss css/main.css --no-source-map",
+    "sass:watch": "sass --watch scss/main.scss css/main.css --no-source-map"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.105.0"
+  }
+}

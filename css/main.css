@@ -144,3 +144,98 @@ a {
 .footer__link:hover {
   color: var(--color-primary);
 }
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.5rem 1.5rem;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.button--primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+.button--primary:hover:not(:disabled) {
+  background-color: transparent;
+}
+.button--ghost {
+  background-color: transparent;
+  border-color: transparent;
+  padding-inline: 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.form-field--grow {
+  flex: 1;
+}
+.form-field__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+.form-field__control {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  transition: border-color 0.25s ease;
+}
+.form-field__control:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.form-error {
+  margin-top: 0.5rem;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.search {
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  padding: 1.5rem;
+}
+.search__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .search__form {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+@media (min-width: 768px) {
+  .search__submit {
+    min-width: 140px;
+  }
+}

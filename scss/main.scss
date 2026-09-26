@@ -19,5 +19,7 @@
 @use 'components/status';
 @use 'components/card';
 @use 'components/pagination';
+@use 'components/stat-bar';
 
 // Páginas / vistas
+@use 'pages/detail';

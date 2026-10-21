@@ -2,11 +2,12 @@
 // Buscador de Superhéroes - punto de entrada
 // ==========================================================================
 import { RESULTS_PER_PAGE } from './config.js';
-import { searchHeroesByName } from './services/api.js';
+import { searchHeroesByName, getHeroById } from './services/api.js';
 import { sortByName, paginate, getTotalPages, clamp } from './utils/helpers.js';
 import { readStateFromUrl, writeStateToUrl } from './utils/urlState.js';
 import { renderHeroCards } from './components/heroCards.js';
 import { renderPagination, getTargetPage } from './components/pagination.js';
+import { renderHeroDetail } from './components/heroDetail.js';
 import { showLoader, showMessage, clearStatus } from './components/status.js';
 
 // --------------------------------------------------------------------------
@@ -17,6 +18,7 @@ const elements = {
   searchInput: document.querySelector('#search-input'),
   orderSelect: document.querySelector('#order-select'),
   searchError: document.querySelector('#search-error'),
+  detail: document.querySelector('#detail'),
   results: document.querySelector('#results'),
   resultsCount: document.querySelector('#results-count'),
   status: document.querySelector('#status'),
@@ -48,6 +50,9 @@ const getSearchResults = async (term) => {
   return results;
 };
 
+const getHero = async (id) =>
+  searchCache.results.find((hero) => hero.id === id) ?? getHeroById(id);
+
 // --------------------------------------------------------------------------
 // Navegación
 // --------------------------------------------------------------------------
@@ -55,6 +60,8 @@ const navigate = (newState, options) => {
   writeStateToUrl(newState, options);
   render();
 };
+
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 // --------------------------------------------------------------------------
 // Vistas
@@ -70,7 +77,14 @@ const resetResults = () => {
   elements.pagination.nav.hidden = true;
 };
 
+const showView = (view) => {
+  elements.detail.hidden = view !== 'detail';
+  elements.results.hidden = view !== 'results';
+};
+
 const renderResultsView = async (state, requestId) => {
+  showView('results');
+
   if (!state.search) {
     resetResults();
     showMessage(elements.status, 'Escribí el nombre de un personaje para comenzar la búsqueda.');
@@ -109,13 +123,37 @@ const renderResultsView = async (state, requestId) => {
   }
 };
 
+const renderDetailView = async (state, requestId) => {
+  showView('detail');
+  showLoader(elements.detail, 'Cargando personaje...');
+
+  const hasSearch = Boolean(state.search);
+  const onBack = () => navigate({ ...state, id: null });
+
+  try {
+    const hero = await getHero(state.id);
+    if (requestId !== currentRequestId) return;
+
+    renderHeroDetail(elements.detail, hero, {
+      onBack,
+      backLabel: hasSearch ? '← Volver a la búsqueda' : '← Volver al inicio',
+    });
+    elements.detail.querySelector('#detail-title')?.focus({ preventScroll: true });
+  } catch (error) {
+    if (requestId !== currentRequestId) return;
+    showMessage(elements.detail, `No se pudo cargar el personaje. ${error.message}`, 'error');
+  }
+};
+
 const render = () => {
   const state = readStateFromUrl();
   currentRequestId += 1;
 
   syncFormWithState(state);
 
-  return renderResultsView(state, currentRequestId);
+  return state.id
+    ? renderDetailView(state, currentRequestId)
+    : renderResultsView(state, currentRequestId);
 };
 
 // --------------------------------------------------------------------------
@@ -133,12 +171,12 @@ const handleSearchSubmit = (event) => {
   }
 
   elements.searchError.hidden = true;
-  navigate({ search, order: elements.orderSelect.value, page: 1 });
+  navigate({ search, order: elements.orderSelect.value, page: 1, id: null });
 };
 
 const handleOrderChange = () => {
   const state = readStateFromUrl();
-  if (!state.search) return;
+  if (!state.search || state.id) return;
   navigate({ ...state, order: elements.orderSelect.value, page: 1 });
 };
 
@@ -161,6 +199,14 @@ const handlePageSelectChange = (event) => {
   goToPage(Number(event.target.value));
 };
 
+const handleCardClick = (event) => {
+  const card = event.target.closest('[data-id]');
+  if (!card) return;
+
+  navigate({ ...readStateFromUrl(), id: card.dataset.id });
+  scrollToTop();
+};
+
 const clearSearchError = () => {
   elements.searchError.hidden = true;
 };
@@ -174,6 +220,7 @@ const init = () => {
   elements.orderSelect.addEventListener('change', handleOrderChange);
   elements.pagination.nav.addEventListener('click', handlePaginationClick);
   elements.pagination.pageSelect.addEventListener('change', handlePageSelectChange);
+  elements.grid.addEventListener('click', handleCardClick);
 
   // Botones atrás/adelante del navegador
   window.addEventListener('popstate', render);

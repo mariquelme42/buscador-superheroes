@@ -38,3 +38,15 @@ export const searchHeroesByName = async (name) => {
   return data.results ?? [];
 };
 
+/**
+ * Obtiene un personaje por su id (recurso individual).
+ */
+export const getHeroById = async (id) => {
+  const data = await fetchFromApi(`/${encodeURIComponent(id)}`);
+
+  if (data.response === 'error') {
+    throw new Error('No se encontró el personaje solicitado');
+  }
+
+  return data;
+};

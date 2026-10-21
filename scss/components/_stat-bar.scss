@@ -1,0 +1,44 @@
+@use 'sass:map';
+@use '../abstracts' as *;
+
+.stats {
+  display: grid;
+  gap: $space-sm;
+
+  @include respond('md') {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: $space-lg;
+  }
+}
+
+.stat-bar {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $space-xs * 0.5;
+    font-size: $font-size-sm;
+    font-weight: 500;
+  }
+
+  &__track {
+    height: 10px;
+    border-radius: $radius-lg;
+    background-color: color('bar-track');
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    width: var(--stat-value, 0%);
+    border-radius: inherit;
+    background-color: color('primary');
+    transition: width 0.6s ease-out;
+  }
+
+  // Un color distinto por cada estadística: .stat-bar--strength, etc.
+  @each $stat, $stat-color in $stat-colors {
+    &--#{$stat} &__fill {
+      background-color: $stat-color;
+    }
+  }
+}

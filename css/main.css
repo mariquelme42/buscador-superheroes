@@ -44,6 +44,20 @@ button {
   color-scheme: light;
 }
 
+:root[data-theme=dark] {
+  --color-bg: #121212;
+  --color-surface: #1f1f24;
+  --color-text: #f1f1f1;
+  --color-text-muted: #a8abb2;
+  --color-primary: #ff4d52;
+  --color-primary-contrast: #ffffff;
+  --color-secondary: #0b0b14;
+  --color-border: #34343c;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-bar-track: #34343c;
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -422,6 +436,25 @@ a {
 }
 .stat-bar--combat .stat-bar__fill {
   background-color: #ec4899;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.25rem;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.theme-toggle:hover {
+  border-color: #ffffff;
+  transform: rotate(20deg);
 }
 
 .detail {

@@ -1,0 +1,22 @@
+@use '../abstracts' as *;
+
+.search {
+  @include surface;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+
+    @include respond('md') {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  &__submit {
+    @include respond('md') {
+      min-width: 140px;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+// ==========================================================================
+// Punto de entrada de estilos. Se compila a css/main.css
+// ==========================================================================
+
+// Base
+@use 'base/reset';
+@use 'base/themes';
+@use 'base/base';
+
+// Layout
+@use 'layout/container';
+@use 'layout/header';
+@use 'layout/footer';
+
+// Componentes
+@use 'components/button';
+@use 'components/form';
+@use 'components/search';
+
+// Páginas / vistas

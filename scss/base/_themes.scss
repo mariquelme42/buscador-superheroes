@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// Genera las custom properties de un tema a partir del mapa $themes
+@mixin theme-properties($theme-name) {
+  @each $name, $value in map.get($themes, $theme-name) {
+    --color-#{$name}: #{$value};
+  }
+}
+
+:root {
+  @include theme-properties('light');
+  color-scheme: light;
+}
+

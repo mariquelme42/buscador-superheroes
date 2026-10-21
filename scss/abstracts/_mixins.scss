@@ -1,0 +1,44 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'functions' as *;
+
+// Media query mobile-first. Uso: @include respond('md') { ... }
+@mixin respond($breakpoint) {
+  @if not map.has-key($breakpoints, $breakpoint) {
+    @error 'El breakpoint "#{$breakpoint}" no existe.';
+  }
+  @media (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+@mixin flex-center($gap: 0) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $gap;
+}
+
+@mixin focus-ring {
+  outline: 3px solid color('primary');
+  outline-offset: 2px;
+}
+
+@mixin surface($padding: $space-md) {
+  background-color: color('surface');
+  border-radius: $radius-md;
+  box-shadow: 0 2px 8px color('shadow');
+  padding: $padding;
+}
+
+// Oculta visualmente pero mantiene accesible para lectores de pantalla
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

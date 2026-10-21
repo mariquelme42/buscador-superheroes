@@ -49,6 +49,18 @@
       </h2>
       <div class="status" id="status" aria-live="polite"></div>
       <ul class="grid" id="results-grid"></ul>
+
+      <nav class="pagination" id="pagination" aria-label="Paginado de resultados" hidden>
+        <button type="button" class="button pagination__button" data-page="first" aria-label="Primera página">«</button>
+        <button type="button" class="button pagination__button" data-page="prev" aria-label="Página anterior">‹</button>
+        <div class="pagination__info">
+          <label for="page-select">Página</label>
+          <select class="form-field__control pagination__select" id="page-select"></select>
+          <span>de <span id="total-pages">1</span></span>
+        </div>
+        <button type="button" class="button pagination__button" data-page="next" aria-label="Página siguiente">›</button>
+        <button type="button" class="button pagination__button" data-page="last" aria-label="Última página">»</button>
+      </nav>
     </section>
   </main>
 

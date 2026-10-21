@@ -339,3 +339,37 @@ a {
   font-size: 0.875rem;
   color: var(--color-text-muted);
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.pagination__button {
+  min-width: 44px;
+  padding-inline: 1rem;
+  font-size: 1.25rem;
+}
+.pagination__info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  order: -1;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+@media (min-width: 576px) {
+  .pagination__info {
+    order: 0;
+    width: auto;
+    margin: 0 1rem;
+  }
+}
+.pagination__select {
+  min-width: 72px;
+}

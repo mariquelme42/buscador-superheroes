@@ -1,0 +1,31 @@
+@use '../abstracts' as *;
+
+.pagination {
+  @include flex-center($space-xs);
+  flex-wrap: wrap;
+  margin-top: $space-lg;
+
+  &__button {
+    min-width: 44px;
+    padding-inline: $space-sm;
+    font-size: $font-size-lg;
+  }
+
+  &__info {
+    @include flex-center($space-xs);
+    order: -1;
+    width: 100%;
+    margin-bottom: $space-xs;
+    font-weight: 500;
+
+    @include respond('sm') {
+      order: 0;
+      width: auto;
+      margin: 0 $space-sm;
+    }
+  }
+
+  &__select {
+    min-width: 72px;
+  }
+}

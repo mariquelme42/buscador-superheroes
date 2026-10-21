@@ -1,10 +1,12 @@
 // ==========================================================================
 // Buscador de Superhéroes - punto de entrada
 // ==========================================================================
+import { RESULTS_PER_PAGE } from './config.js';
 import { searchHeroesByName } from './services/api.js';
-import { sortByName } from './utils/helpers.js';
+import { sortByName, paginate, getTotalPages, clamp } from './utils/helpers.js';
 import { readStateFromUrl, writeStateToUrl } from './utils/urlState.js';
 import { renderHeroCards } from './components/heroCards.js';
+import { renderPagination, getTargetPage } from './components/pagination.js';
 import { showLoader, showMessage, clearStatus } from './components/status.js';
 
 // --------------------------------------------------------------------------
@@ -19,6 +21,11 @@ const elements = {
   resultsCount: document.querySelector('#results-count'),
   status: document.querySelector('#status'),
   grid: document.querySelector('#results-grid'),
+  pagination: {
+    nav: document.querySelector('#pagination'),
+    pageSelect: document.querySelector('#page-select'),
+    totalPagesLabel: document.querySelector('#total-pages'),
+  },
 };
 
 // Guardamos la última búsqueda para no volver a pedirla a la API
@@ -60,6 +67,7 @@ const syncFormWithState = ({ search, order }) => {
 const resetResults = () => {
   elements.resultsCount.textContent = 0;
   elements.grid.replaceChildren();
+  elements.pagination.nav.hidden = true;
 };
 
 const renderResultsView = async (state, requestId) => {
@@ -77,6 +85,14 @@ const renderResultsView = async (state, requestId) => {
     if (requestId !== currentRequestId) return;
 
     const sortedResults = sortByName(results, state.order);
+    const totalPages = getTotalPages(sortedResults.length, RESULTS_PER_PAGE);
+    const currentPage = clamp(state.page, 1, totalPages);
+
+    // Si la página de la URL no existe, la corregimos
+    if (currentPage !== state.page) {
+      writeStateToUrl({ ...state, page: currentPage }, { replace: true });
+    }
+
     elements.resultsCount.textContent = sortedResults.length;
 
     if (!sortedResults.length) {
@@ -85,7 +101,8 @@ const renderResultsView = async (state, requestId) => {
     }
 
     clearStatus(elements.status);
-    renderHeroCards(elements.grid, sortedResults);
+    renderHeroCards(elements.grid, paginate(sortedResults, currentPage, RESULTS_PER_PAGE));
+    renderPagination(elements.pagination, { currentPage, totalPages });
   } catch (error) {
     if (requestId !== currentRequestId) return;
     showMessage(elements.status, `No se pudieron cargar los resultados. ${error.message}`, 'error');
@@ -116,13 +133,32 @@ const handleSearchSubmit = (event) => {
   }
 
   elements.searchError.hidden = true;
-  navigate({ search, order: elements.orderSelect.value });
+  navigate({ search, order: elements.orderSelect.value, page: 1 });
 };
 
 const handleOrderChange = () => {
   const state = readStateFromUrl();
   if (!state.search) return;
-  navigate({ ...state, order: elements.orderSelect.value });
+  navigate({ ...state, order: elements.orderSelect.value, page: 1 });
+};
+
+const goToPage = (page) => {
+  const state = readStateFromUrl();
+  navigate({ ...state, page });
+  elements.results.scrollIntoView({ behavior: 'smooth' });
+};
+
+const handlePaginationClick = (event) => {
+  const button = event.target.closest('button[data-page]');
+  if (!button || button.disabled) return;
+
+  const { page } = readStateFromUrl();
+  const totalPages = elements.pagination.pageSelect.options.length;
+  goToPage(getTargetPage(button.dataset.page, page, totalPages));
+};
+
+const handlePageSelectChange = (event) => {
+  goToPage(Number(event.target.value));
 };
 
 const clearSearchError = () => {
@@ -136,6 +172,8 @@ const init = () => {
   elements.form.addEventListener('submit', handleSearchSubmit);
   elements.searchInput.addEventListener('input', clearSearchError);
   elements.orderSelect.addEventListener('change', handleOrderChange);
+  elements.pagination.nav.addEventListener('click', handlePaginationClick);
+  elements.pagination.pageSelect.addEventListener('change', handlePageSelectChange);
 
   // Botones atrás/adelante del navegador
   window.addEventListener('popstate', render);

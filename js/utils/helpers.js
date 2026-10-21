@@ -32,3 +32,16 @@ export const sortByName = (list, order = ORDER.ASC) => {
   );
   return order === ORDER.DESC ? sorted.reverse() : sorted;
 };
+
+/** Cantidad total de páginas (mínimo 1) */
+export const getTotalPages = (totalItems, perPage) =>
+  Math.max(1, Math.ceil(totalItems / perPage));
+
+/** Limita un número entre un mínimo y un máximo */
+export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+/** Devuelve los elementos de una página determinada */
+export const paginate = (list, page, perPage) => {
+  const start = (page - 1) * perPage;
+  return list.slice(start, start + perPage);
+};

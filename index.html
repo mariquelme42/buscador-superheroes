@@ -30,6 +30,13 @@
           <input class="form-field__control" type="search" id="search-input" name="search"
                  placeholder="Ej: batman, spider, woman..." autocomplete="off" required>
         </div>
+        <div class="form-field">
+          <label class="form-field__label" for="order-select">Orden</label>
+          <select class="form-field__control" id="order-select" name="order">
+            <option value="asc">A-Z</option>
+            <option value="desc">Z-A</option>
+          </select>
+        </div>
         <button class="button button--primary search__submit" type="submit">Buscar</button>
       </form>
       <p class="form-error" id="search-error" role="alert" hidden></p>

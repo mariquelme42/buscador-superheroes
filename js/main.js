@@ -2,6 +2,7 @@
 // Buscador de Superhéroes - punto de entrada
 // ==========================================================================
 import { searchHeroesByName } from './services/api.js';
+import { sortByName } from './utils/helpers.js';
 import { readStateFromUrl, writeStateToUrl } from './utils/urlState.js';
 import { renderHeroCards } from './components/heroCards.js';
 import { showLoader, showMessage, clearStatus } from './components/status.js';
@@ -12,6 +13,7 @@ import { showLoader, showMessage, clearStatus } from './components/status.js';
 const elements = {
   form: document.querySelector('#search-form'),
   searchInput: document.querySelector('#search-input'),
+  orderSelect: document.querySelector('#order-select'),
   searchError: document.querySelector('#search-error'),
   results: document.querySelector('#results'),
   resultsCount: document.querySelector('#results-count'),
@@ -50,8 +52,9 @@ const navigate = (newState, options) => {
 // --------------------------------------------------------------------------
 // Vistas
 // --------------------------------------------------------------------------
-const syncFormWithState = ({ search }) => {
+const syncFormWithState = ({ search, order }) => {
   elements.searchInput.value = search;
+  elements.orderSelect.value = order;
 };
 
 const resetResults = () => {
@@ -73,15 +76,16 @@ const renderResultsView = async (state, requestId) => {
     const results = await getSearchResults(state.search);
     if (requestId !== currentRequestId) return;
 
-    elements.resultsCount.textContent = results.length;
+    const sortedResults = sortByName(results, state.order);
+    elements.resultsCount.textContent = sortedResults.length;
 
-    if (!results.length) {
+    if (!sortedResults.length) {
       showMessage(elements.status, `No se encontraron personajes para "${state.search}".`);
       return;
     }
 
     clearStatus(elements.status);
-    renderHeroCards(elements.grid, results);
+    renderHeroCards(elements.grid, sortedResults);
   } catch (error) {
     if (requestId !== currentRequestId) return;
     showMessage(elements.status, `No se pudieron cargar los resultados. ${error.message}`, 'error');
@@ -112,7 +116,13 @@ const handleSearchSubmit = (event) => {
   }
 
   elements.searchError.hidden = true;
-  navigate({ search });
+  navigate({ search, order: elements.orderSelect.value });
+};
+
+const handleOrderChange = () => {
+  const state = readStateFromUrl();
+  if (!state.search) return;
+  navigate({ ...state, order: elements.orderSelect.value });
 };
 
 const clearSearchError = () => {
@@ -125,6 +135,7 @@ const clearSearchError = () => {
 const init = () => {
   elements.form.addEventListener('submit', handleSearchSubmit);
   elements.searchInput.addEventListener('input', clearSearchError);
+  elements.orderSelect.addEventListener('change', handleOrderChange);
 
   // Botones atrás/adelante del navegador
   window.addEventListener('popstate', render);

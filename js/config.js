@@ -2,10 +2,9 @@
 // Configuración general de la aplicación
 // ==========================================================================
 
-// Reemplazá este valor por el access-token que te da https://superheroapi.com
-export const API_TOKEN = 'TU_ACCESS_TOKEN';
+export const API_TOKEN = '0d2c350c283a0b391316c8736dd09d0f';
 
-export const API_BASE_URL = `https://superheroapi.com/api/${API_TOKEN}`;
+export const API_BASE_URL = `https://superheroapi.com/api.php/${API_TOKEN}`;
 
 export const RESULTS_PER_PAGE = 20;
 

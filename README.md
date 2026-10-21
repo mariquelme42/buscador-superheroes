@@ -1,6 +1,6 @@
 # 🦸 Buscador de Superhéroes
 
-Trabajo Práctico Integrador · Carrera Front End
+Trabajo Práctico Integrador · Front End
 
 Aplicación web que permite buscar superhéroes por nombre, ordenarlos alfabéticamente, recorrer los resultados con un paginado y ver la ficha completa de cada personaje. Los datos se obtienen de la [SuperHero API](https://superheroapi.com).
 
